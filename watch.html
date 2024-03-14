@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video Player</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+    />
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(37deg, #4a148c, #0d47a1),
+          url("background.jpg") center/cover fixed;
+      }
+
+      .container {
+        text-align: center;
+      }
+
+      input {
+        width: 80%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+      }
+
+      button {
+        padding: 10px 20px;
+        background-color: #4a148c;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #6a1b9a;
+      }
+
+      video {
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <input
+        type="text"
+        id="videoUrl"
+        placeholder="Insira o link do vídeo..."
+      />
+      <button onclick="playVideo()">Reproduzir Vídeo</button>
+      <button onclick="watchNow()">Assistir Agora</button>
+      <video controls width="600">
+        <source src="" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <script>
+      async function playVideo() {
+        try {
+          const videoUrl = document.getElementById("videoUrl").value.trim();
+          const response = await fetch(
+            `http://localhost:3000/download-video?url=${encodeURIComponent(videoUrl)}`
+          );
+          const videoSrc = await response.text();
+          const videoElement = document.querySelector("video");
+          videoElement.src = videoSrc;
+        } catch (error) {
+          console.error("Erro ao reproduzir o vídeo:", error);
+        }
+      }
+
+      async function watchNow() {
+        try {
+          const videoUrl = document.getElementById("videoUrl").value.trim();
+          const response = await fetch(
+            `/download-video?url=${encodeURIComponent(videoUrl)}`
+          );
+          const videoSrc = await response.text();
+          window.location.href = videoSrc;
+        } catch (error) {
+          console.error("Erro ao assistir o vídeo:", error);
+        }
+      }
+    </script>
+  </body>
+</html>
